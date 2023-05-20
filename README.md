@@ -79,3 +79,26 @@
                         --> Script Path (Jenkinsfile-kanat)
 
 ## [Pipeline Syntax Helper](http://url:8080/job/first-pipeline/pipeline-syntax/)
+
+
+## [Jenkinsfile parameters](https://www.jenkins.io/doc/book/pipeline/syntax/#parameters)
+
+
+# Jenkinsfile
+    - Environments
+        - userdefined
+        - builtin
+    - Options   
+        - 
+    - Parameters
+        - userdefined
+            - choices
+            - string
+            - boolean
+    - triggers
+    - Jenkins cron
+    - stage
+        
+    - tools
+    - input 
+    - when 

@@ -1,5 +1,17 @@
 pipeline {
-    agent any
+    // Global Setting for the pipeline 
+    agent any 
+
+    parameters {
+        string(name: 'name', defaultValue: 'first-pipeline', description: 'First-pipeline ')
+        choice(name: 'env_name', choices: ['dev', 'qa', 'prod'], description: 'Application Environments to deploy')
+        booleanParam(name: 'create_ec2', defaultValue: false, description: 'whether or not to create ec2 instance')
+    }
+
+    environment { 
+        CC = 'Global CC'
+    }
+
 
     stages {
         // stage('SCM Checkout'){
@@ -8,13 +20,19 @@ pipeline {
         //     }
         // }
         stage('Terraform Init') {
+            environment {
+                CC2 = 'Local CC'
+            }
             steps {
-                sh "echo 'terraform init'"
+                sh "echo deploying into ${params.env_name}"
+                sh "echo Running ${env.BUILD_ID} on ${env.BUILD_URL}"
+                
             }
         }
         stage('Terraform Plan'){
             steps {
-                sh "echo 'terraform plan'"
+                sh "echo ${env.CC2}"
+                sh "echo ${env.CC}"
             }
         }
         stage('Terraform Apply'){
@@ -22,5 +40,30 @@ pipeline {
                 sh "echo 'terraform apply'"
             }
         }
+        stage('Deploy to production') {
+            when {
+                beforeInput true
+                expression {
+                    params.env_name ==~ 'prod'
+                }
+            }
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                submitter "tbadmin"
+                parameters {
+                    string(name: 'PERSON', defaultValue: 'tbadmin', description: 'Who should I say hello to?')
+                }
+            }
+            steps {
+                echo "Hello, ${PERSON}, nice to meet you."
+            }
+        }
+
+
     }
+
+    // post {
+
+    // }
 }
