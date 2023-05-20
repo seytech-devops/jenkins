@@ -4,12 +4,14 @@ resource "aws_instance" "jenkins_ec2" {
   instance_type          = var.instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
+  iam_instance_profile   = aws_iam_instance_profile.jenkins_instance_profile.name
 
   tags = {
     Name = "Jenkins"
     TF   = true
   }
 
+  # This will make sure to create a EC2 instance before it destroy the old one. 
   lifecycle {
     create_before_destroy = true
   }
@@ -60,5 +62,47 @@ resource "aws_security_group" "jenkins_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "Jenkins"
+    TF   = true
+  }
+}
+
+# IAM role 
+resource "aws_iam_role" "jenkins_role" {
+  name = "jenkins_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name = "Jenkins"
+    TF   = true
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "jenkins_role_policy_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+  role       = aws_iam_role.jenkins_role.name
+}
+
+resource "aws_iam_instance_profile" "jenkins_instance_profile" {
+  name = "my-instance-profile"
+  role = aws_iam_role.jenkins_role.name
+
+  tags = {
+    Name = "Jenkins"
+    TF   = true
   }
 }
