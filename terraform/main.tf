@@ -2,7 +2,7 @@
 resource "aws_instance" "jenkins_ec2" {
   ami                    = data.aws_ami.amazon_ami.id
   instance_type          = var.instance_type
-  key_name               = var.key_name
+  key_name               = "ec2"
   vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
 
   tags = {
@@ -32,7 +32,7 @@ resource "aws_instance" "jenkins_ec2" {
 resource "aws_security_group" "jenkins_sg" {
   name        = "jenkins_sg"
   description = "Allow ssh and http traffic"
-  vpc_id      = var.vpc_id
+  vpc_id      = "vpc-0928a337ca406c1f7"
 
   ingress {
     from_port   = 22
