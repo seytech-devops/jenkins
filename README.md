@@ -102,3 +102,23 @@
     - tools
     - input 
     - when 
+
+
+## Install terraform on jenkins box
+- ssh into EC2 box that runs jenkins
+    - ssh -i ~/.ssh/<yourkey> ec2-user@<yourip>
+- switch to root
+    - sudo su 
+- [Install tfswitch](https://tfswitch.warrensbox.com/Install/)
+    - curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash
+- tswitch 
+    - select the first one
+- Add jenkins user to root group
+    - usermod -G root jenkins
+- switch to jenkins user
+    - su - jenkins
+
+
+
+
+
