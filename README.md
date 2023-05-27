@@ -64,6 +64,8 @@
                 --> Global credentials (Unrestricted)
                     --> Add Credentials
                         --> SSH Username with private key  (Need to generate ssh-key)
+                           --> add public key to your github acc
+                             --> go to the CLI(jenkins user) and type <ssh github.com> 
 
 
 
