@@ -1,10 +1,14 @@
 pipeline {
-    agent any 
+    agent any
+    
+    options {
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '7', numToKeepStr: '5')
+    }
 
     stages {
-        stage('Code Checkout'){
+        stage('SCM Checkout'){
             steps{
-                git branch: 'main', credentialsId: 'sshkey', url: 'git@github.com:seytech-devops/jenkins.git'
+                checkout scmGit(branches: [[name: '**']], extensions: [], userRemoteConfigs: [[credentialsId: 'sshkey', url: 'git@github.com:seytech-devops/terraform-ansible-aws.git']])
             }
         }
         stage('Change directory'){
